@@ -247,27 +247,25 @@ static struct s3c24xx_mci_pdata mini2440_mmc_cfg __initdata = {
 
 static struct mtd_partition mini2440_default_nand_part[] __initdata = {
 	[0] = {
-		.name	= "u-boot",
+		.name	= "bootloader",
 		.size	= SZ_256K,
 		.offset	= 0,
 	},
 	[1] = {
-		.name	= "u-boot-env",
+		.name	= "params",
+		.offset = MTDPART_OFS_APPEND,
 		.size	= SZ_128K,
-		.offset	= SZ_256K,
 	},
 	[2] = {
 		.name	= "kernel",
-		/* 5 megabytes, for a kernel with no modules
-		 * or a uImage with a ramdisk attached */
-		.size	= 0x00500000,
-		.offset	= SZ_256K + SZ_128K,
+		.offset = MTDPART_OFS_APPEND,
+		.size	= SZ_2M,
 	},
 	[3] = {
-		.name	= "root",
-		.offset	= SZ_256K + SZ_128K + 0x00500000,
+		.name	= "rootfs",
+		.offset	= MTDPART_OFS_APPEND,
 		.size	= MTDPART_SIZ_FULL,
-	},
+	}
 };
 
 static struct s3c2410_nand_set mini2440_nand_sets[] __initdata = {

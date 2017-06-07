@@ -2037,6 +2037,28 @@ MODULE_PARM_DESC(timeout, "Streaming control requests timeout");
  * though they are compliant.
  */
 static struct usb_device_id uvc_ids[] = {
+    /*iPassion USB Web Camera */
+    { .match_flags = USB_DEVICE_ID_MATCH_DEVICE
+                      | USB_DEVICE_ID_MATCH_INT_INFO,
+    .idVendor = 0x1B3B,
+    .idProduct = 0x2970,/*If you use iP2977, then type "0x2977" */                  
+    .bInterfaceClass = USB_CLASS_VIDEO,
+    .bInterfaceSubClass = 1,
+    .bInterfaceProtocol = 0,
+    .driver_info = UVC_QUIRK_PROBE_MINMAX
+                     | UVC_QUIRK_IGNORE_SELECTOR_UNIT},
+
+    /*iPassion USB Web Camera */
+    { .match_flags = USB_DEVICE_ID_MATCH_DEVICE
+                      | USB_DEVICE_ID_MATCH_INT_INFO,
+    .idVendor = 0x1B3B,
+    .idProduct = 0x2977,/*If you use iP2977, then type "0x2977" */                  
+    .bInterfaceClass = USB_CLASS_VIDEO,
+    .bInterfaceSubClass = 1,
+    .bInterfaceProtocol = 0,
+    .driver_info = UVC_QUIRK_PROBE_MINMAX
+                     | UVC_QUIRK_IGNORE_SELECTOR_UNIT},
+
 	/* LogiLink Wireless Webcam */
 	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
 				| USB_DEVICE_ID_MATCH_INT_INFO,
