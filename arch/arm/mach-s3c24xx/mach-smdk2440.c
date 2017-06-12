@@ -48,6 +48,7 @@
 #include <plat/common-smdk.h>
 
 #include "common.h"
+#include <asm/io.h>
 
 static struct map_desc smdk2440_iodesc[] __initdata = {
 	/* ISA IO Space map (memory space selected by A24) */
@@ -113,22 +114,72 @@ static struct s3c2410fb_display smdk2440_lcd_cfg __initdata = {
 			  S3C2410_LCDCON5_INVVFRAME |
 			  S3C2410_LCDCON5_PWREN |
 			  S3C2410_LCDCON5_HWSWP,
+			  
+#if defined(CONFIG_FB_JZ2440_4_3)
+    .type     = (S3C2410_LCDCON1_TFT16BPP |\
+                       S3C2410_LCDCON1_TFT),
 
-	.type		= S3C2410_LCDCON1_TFT,
+
+	.width		= 480,
+	.height		= 272,
+
+	.pixclock	= 111111, /* HCLK 100 MHz, divisor 9 */
+	.xres		= 480,
+	.yres		= 272,
+	.bpp		= 16,
+	/*left_margin: HFPD, 发出最后一行里最后一个象素数据之后，再过多长时间才发出HSYNC*/
+	.left_margin	= 2,
+	
+	/*right_margin: HBPD, VSYNC之后再过多长时间才能发出第1行数据*/
+	.right_margin	= 2,
+	
+	/* hsync_len:HSPW, HSYNC信号的脉冲宽度,*/	
+	.hsync_len	= 41,
+
+	/*upper_margin: VBPD, VSYNC之后再过多长时间才能发出第1行数据*/
+	.upper_margin	= 2,
+
+	/*lower_margin: VFPD, 发出最后一行数据之后，再过多长时间才发出VSYNC*/
+	.lower_margin	= 2,
+
+	/*vsync_len: VSPW, VSYNC信号的脉冲宽度,*/
+	.vsync_len	= 10,
+
+#endif
+
+#if defined(CONFIG_FB_JZ2440_3_5)
+    .type     = (S3C2410_LCDCON1_TFT16BPP |\
+                       S3C2410_LCDCON1_TFT),
 
 	.width		= 240,
 	.height		= 320,
 
-	.pixclock	= 166667, /* HCLK 60 MHz, divisor 10 */
+
+	/*DCF是Dot Clk Frequency，单位是MHz，是扫描像素点的频率。计算出来的pixclock单位是ps。*/
+	.pixclock	= 111111, /* HCLK 100 MHz, divisor 9 */
 	.xres		= 240,
 	.yres		= 320,
 	.bpp		= 16,
-	.left_margin	= 20,
-	.right_margin	= 8,
-	.hsync_len	= 4,
-	.upper_margin	= 8,
-	.lower_margin	= 7,
-	.vsync_len	= 4,
+	/*left_margin: HFPD, 发出最后一行里最后一个象素数据之后，再过多长时间才发出HSYNC*/
+	.left_margin	= 2,
+	
+	/*right_margin: HBPD, VSYNC之后再过多长时间才能发出第1行数据*/
+	.right_margin	= 2,
+	
+	/* hsync_len:HSPW, HSYNC信号的脉冲宽度,*/	
+	.hsync_len	= 41,
+
+	/*upper_margin: VBPD, VSYNC之后再过多长时间才能发出第1行数据*/
+	.upper_margin	= 2,
+
+	/*lower_margin: VFPD, 发出最后一行数据之后，再过多长时间才发出VSYNC*/
+	.lower_margin	= 2,
+
+	/*vsync_len: VSPW, VSYNC信号的脉冲宽度,*/
+	.vsync_len	= 10,
+
+#endif
+
 };
 
 static struct s3c2410fb_mach_info smdk2440_fb_info __initdata = {
@@ -148,7 +199,8 @@ static struct s3c2410fb_mach_info smdk2440_fb_info __initdata = {
 	.gpdup_mask	= 0xffffffff,
 #endif
 
-	.lpcsel		= ((0xCE6) & ~7) | 1<<4,
+        //.lpcsel                = ((0xCE6) & ~7) | 1<<4,
+        .lpcsel = 0xf82,
 };
 
 static struct platform_device *smdk2440_devices[] __initdata = {
@@ -173,6 +225,12 @@ static void __init smdk2440_machine_init(void)
 
 	platform_add_devices(smdk2440_devices, ARRAY_SIZE(smdk2440_devices));
 	smdk_machine_init();
+
+	/*支持启动背光灯和LCD_PWREN*/
+	writel((readl(S3C2410_GPBCON) & ~(3)) | 1, S3C2410_GPBCON);
+	writel((readl(S3C2410_GPBDAT) | 1), S3C2410_GPBDAT);
+	writel((readl(S3C2410_GPGCON) | (3<<8)), S3C2410_GPGCON);
+	
 }
 
 MACHINE_START(S3C2440, "SMDK2440")
