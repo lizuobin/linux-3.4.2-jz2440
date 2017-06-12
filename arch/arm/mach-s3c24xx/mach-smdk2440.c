@@ -107,7 +107,7 @@ static struct s3c2410_uartcfg smdk2440_uartcfgs[] __initdata = {
 
 /* LCD driver info */
 
-static struct s3c2410fb_display smdk2440_lcd_cfg __initdata = {
+static struct s3c2410fb_display smdk2440_lcd_cfg_480_272 __initdata = {
 
 	.lcdcon5	= S3C2410_LCDCON5_FRM565 |
 			  S3C2410_LCDCON5_INVVLINE |
@@ -115,7 +115,7 @@ static struct s3c2410fb_display smdk2440_lcd_cfg __initdata = {
 			  S3C2410_LCDCON5_PWREN |
 			  S3C2410_LCDCON5_HWSWP,
 			  
-#if defined(CONFIG_FB_JZ2440_4_3)
+
     .type     = (S3C2410_LCDCON1_TFT16BPP |\
                        S3C2410_LCDCON1_TFT),
 
@@ -127,27 +127,35 @@ static struct s3c2410fb_display smdk2440_lcd_cfg __initdata = {
 	.xres		= 480,
 	.yres		= 272,
 	.bpp		= 16,
-	/*left_margin: HFPD, å‘å‡ºæœ€åä¸€è¡Œé‡Œæœ€åä¸€ä¸ªè±¡ç´ æ•°æ®ä¹‹åï¼Œå†è¿‡å¤šé•¿æ—¶é—´æ‰å‘å‡ºHSYNC*/
+	/*left_margin: HFPD, ·¢³ö×îºóÒ»ĞĞÀï×îºóÒ»¸öÏóËØÊı¾İÖ®ºó£¬ÔÙ¹ı¶à³¤Ê±¼ä²Å·¢³öHSYNC*/
 	.left_margin	= 2,
 	
-	/*right_margin: HBPD, VSYNCä¹‹åå†è¿‡å¤šé•¿æ—¶é—´æ‰èƒ½å‘å‡ºç¬¬1è¡Œæ•°æ®*/
+	/*right_margin: HBPD, VSYNCÖ®ºóÔÙ¹ı¶à³¤Ê±¼ä²ÅÄÜ·¢³öµÚ1ĞĞÊı¾İ*/
 	.right_margin	= 2,
 	
-	/* hsync_len:HSPW, HSYNCä¿¡å·çš„è„‰å†²å®½åº¦,*/	
+	/* hsync_len:HSPW, HSYNCĞÅºÅµÄÂö³å¿í¶È,*/	
 	.hsync_len	= 41,
 
-	/*upper_margin: VBPD, VSYNCä¹‹åå†è¿‡å¤šé•¿æ—¶é—´æ‰èƒ½å‘å‡ºç¬¬1è¡Œæ•°æ®*/
+	/*upper_margin: VBPD, VSYNCÖ®ºóÔÙ¹ı¶à³¤Ê±¼ä²ÅÄÜ·¢³öµÚ1ĞĞÊı¾İ*/
 	.upper_margin	= 2,
 
-	/*lower_margin: VFPD, å‘å‡ºæœ€åä¸€è¡Œæ•°æ®ä¹‹åï¼Œå†è¿‡å¤šé•¿æ—¶é—´æ‰å‘å‡ºVSYNC*/
+	/*lower_margin: VFPD, ·¢³ö×îºóÒ»ĞĞÊı¾İÖ®ºó£¬ÔÙ¹ı¶à³¤Ê±¼ä²Å·¢³öVSYNC*/
 	.lower_margin	= 2,
 
-	/*vsync_len: VSPW, VSYNCä¿¡å·çš„è„‰å†²å®½åº¦,*/
+	/*vsync_len: VSPW, VSYNCĞÅºÅµÄÂö³å¿í¶È,*/
 	.vsync_len	= 10,
 
-#endif
+};
 
-#if defined(CONFIG_FB_JZ2440_3_5)
+static struct s3c2410fb_display smdk2440_lcd_cfg_320_240 __initdata = {
+
+	.lcdcon5	= S3C2410_LCDCON5_FRM565 |
+			  S3C2410_LCDCON5_INVVLINE |
+			  S3C2410_LCDCON5_INVVFRAME |
+			  S3C2410_LCDCON5_PWREN |
+			  S3C2410_LCDCON5_HWSWP,
+			  
+
     .type     = (S3C2410_LCDCON1_TFT16BPP |\
                        S3C2410_LCDCON1_TFT),
 
@@ -155,35 +163,57 @@ static struct s3c2410fb_display smdk2440_lcd_cfg __initdata = {
 	.height		= 320,
 
 
-	/*DCFæ˜¯Dot Clk Frequencyï¼Œå•ä½æ˜¯MHzï¼Œæ˜¯æ‰«æåƒç´ ç‚¹çš„é¢‘ç‡ã€‚è®¡ç®—å‡ºæ¥çš„pixclockå•ä½æ˜¯psã€‚*/
+	/*DCFÊÇDot Clk Frequency£¬µ¥Î»ÊÇMHz£¬ÊÇÉ¨ÃèÏñËØµãµÄÆµÂÊ¡£¼ÆËã³öÀ´µÄpixclockµ¥Î»ÊÇps¡£*/
 	.pixclock	= 111111, /* HCLK 100 MHz, divisor 9 */
 	.xres		= 240,
 	.yres		= 320,
 	.bpp		= 16,
-	/*left_margin: HFPD, å‘å‡ºæœ€åä¸€è¡Œé‡Œæœ€åä¸€ä¸ªè±¡ç´ æ•°æ®ä¹‹åï¼Œå†è¿‡å¤šé•¿æ—¶é—´æ‰å‘å‡ºHSYNC*/
+	/*left_margin: HFPD, ·¢³ö×îºóÒ»ĞĞÀï×îºóÒ»¸öÏóËØÊı¾İÖ®ºó£¬ÔÙ¹ı¶à³¤Ê±¼ä²Å·¢³öHSYNC*/
 	.left_margin	= 2,
 	
-	/*right_margin: HBPD, VSYNCä¹‹åå†è¿‡å¤šé•¿æ—¶é—´æ‰èƒ½å‘å‡ºç¬¬1è¡Œæ•°æ®*/
+	/*right_margin: HBPD, VSYNCÖ®ºóÔÙ¹ı¶à³¤Ê±¼ä²ÅÄÜ·¢³öµÚ1ĞĞÊı¾İ*/
 	.right_margin	= 2,
 	
-	/* hsync_len:HSPW, HSYNCä¿¡å·çš„è„‰å†²å®½åº¦,*/	
+	/* hsync_len:HSPW, HSYNCĞÅºÅµÄÂö³å¿í¶È,*/	
 	.hsync_len	= 41,
 
-	/*upper_margin: VBPD, VSYNCä¹‹åå†è¿‡å¤šé•¿æ—¶é—´æ‰èƒ½å‘å‡ºç¬¬1è¡Œæ•°æ®*/
+	/*upper_margin: VBPD, VSYNCÖ®ºóÔÙ¹ı¶à³¤Ê±¼ä²ÅÄÜ·¢³öµÚ1ĞĞÊı¾İ*/
 	.upper_margin	= 2,
 
-	/*lower_margin: VFPD, å‘å‡ºæœ€åä¸€è¡Œæ•°æ®ä¹‹åï¼Œå†è¿‡å¤šé•¿æ—¶é—´æ‰å‘å‡ºVSYNC*/
+	/*lower_margin: VFPD, ·¢³ö×îºóÒ»ĞĞÊı¾İÖ®ºó£¬ÔÙ¹ı¶à³¤Ê±¼ä²Å·¢³öVSYNC*/
 	.lower_margin	= 2,
 
-	/*vsync_len: VSPW, VSYNCä¿¡å·çš„è„‰å†²å®½åº¦,*/
+	/*vsync_len: VSPW, VSYNCĞÅºÅµÄÂö³å¿í¶È,*/
 	.vsync_len	= 10,
 
-#endif
+
+
 
 };
 
-static struct s3c2410fb_mach_info smdk2440_fb_info __initdata = {
-	.displays	= &smdk2440_lcd_cfg,
+static struct s3c2410fb_mach_info smdk2440_fb_info_480_272 __initdata = {
+	.displays	= &smdk2440_lcd_cfg_480_272,
+	.num_displays	= 1,
+	.default_display = 0,
+
+#if 0
+	/* currently setup by downloader */
+	.gpccon		= 0xaa940659,
+	.gpccon_mask	= 0xffffffff,
+	.gpcup		= 0x0000ffff,
+	.gpcup_mask	= 0xffffffff,
+	.gpdcon		= 0xaa84aaa0,
+	.gpdcon_mask	= 0xffffffff,
+	.gpdup		= 0x0000faff,
+	.gpdup_mask	= 0xffffffff,
+#endif
+
+        //.lpcsel                = ((0xCE6) & ~7) | 1<<4,
+        .lpcsel = 0xf82,
+};
+
+static struct s3c2410fb_mach_info smdk2440_fb_info_320_240 __initdata = {
+	.displays	= &smdk2440_lcd_cfg_320_240,
 	.num_displays	= 1,
 	.default_display = 0,
 
@@ -220,13 +250,26 @@ static void __init smdk2440_map_io(void)
 
 static void __init smdk2440_machine_init(void)
 {
-	s3c24xx_fb_set_platdata(&smdk2440_fb_info);
+	
+#if defined(CONFIG_FB_JZ2440_3_5)
+
+	s3c24xx_fb_set_platdata(&smdk2440_fb_info_320_240);
+	
+#endif
+
+#if defined(CONFIG_FB_JZ2440_4_3)
+
+	s3c24xx_fb_set_platdata(&smdk2440_fb_info_480_272);
+	
+#endif
+	
 	s3c_i2c0_set_platdata(NULL);
+	
 
 	platform_add_devices(smdk2440_devices, ARRAY_SIZE(smdk2440_devices));
 	smdk_machine_init();
 
-	/*æ”¯æŒå¯åŠ¨èƒŒå…‰ç¯å’ŒLCD_PWREN*/
+	/*Ö§³ÖÆô¶¯±³¹âµÆºÍLCD_PWREN*/
 	writel((readl(S3C2410_GPBCON) & ~(3)) | 1, S3C2410_GPBCON);
 	writel((readl(S3C2410_GPBDAT) | 1), S3C2410_GPBDAT);
 	writel((readl(S3C2410_GPGCON) | (3<<8)), S3C2410_GPGCON);
