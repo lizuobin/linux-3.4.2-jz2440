@@ -113,8 +113,8 @@ config S3C24XX_SETUP_TS
 
 config S3C2410_DMA
 	bool
-	depends on S3C24XX_DMA && (CPU_S3C2410 || CPU_S3C2442)
-	default y if CPU_S3C2410 || CPU_S3C2442
+	depends on S3C24XX_DMA && (CPU_S3C2410 || CPU_S3C2442 || CPU_S3C2440)
+	default y if CPU_S3C2410 || CPU_S3C2442 || CPU_S3C2440
 	help
 	  DMA device selection for S3C2410 and compatible CPUs
 

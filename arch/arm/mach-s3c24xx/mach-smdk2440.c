@@ -50,6 +50,8 @@
 #include "common.h"
 #include <asm/io.h>
 
+#include <sound/s3c24xx_wm8976.h>
+
 static struct map_desc smdk2440_iodesc[] __initdata = {
 	/* ISA IO Space map (memory space selected by A24) */
 
@@ -233,12 +235,37 @@ static struct s3c2410fb_mach_info smdk2440_fb_info_320_240 __initdata = {
         .lpcsel = 0xf82,
 };
 
+
+/* AUDIO */
+
+static struct s3c24xx_wm8976_platform_data smdk2440_audio_pins = {
+	.l3_clk  = S3C2410_GPB(4),
+	.l3_mode = S3C2410_GPB(2),
+	.l3_data = S3C2410_GPB(3),
+};
+
+static struct platform_device smdk2440_audio = {
+	.name		= "s3c24xx_wm8976",
+	.id		= 0,
+	.dev		= {
+		.platform_data	= &smdk2440_audio_pins,
+	},
+};
+
+
+static struct platform_device wm8976_codec = {
+		.name = "wm8976-codec",
+		.id = -1,
+};
+
 static struct platform_device *smdk2440_devices[] __initdata = {
 	&s3c_device_ohci,
 	&s3c_device_lcd,
 	&s3c_device_wdt,
 	&s3c_device_i2c0,
 	&s3c_device_iis,
+    &smdk2440_audio,
+    &wm8976_codec,
 };
 
 static void __init smdk2440_map_io(void)

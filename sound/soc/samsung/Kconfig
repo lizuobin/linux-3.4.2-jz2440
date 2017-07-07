@@ -100,6 +100,13 @@ config SND_SOC_SAMSUNG_S3C24XX_UDA134X
 	select SND_SOC_L3
 	select SND_SOC_UDA134X
 
+config SND_SOC_SAMSUNG_S3C24XX_WM8976
+	tristate "SoC I2S Audio support WM8976 wired to a S3C24XX"
+	depends on SND_SOC_SAMSUNG && ARCH_S3C24XX
+	select SND_S3C24XX_I2S
+	select SND_SOC_L3
+	select SND_SOC_WM8976
+
 config SND_SOC_SAMSUNG_SIMTEC
 	tristate
 	help
