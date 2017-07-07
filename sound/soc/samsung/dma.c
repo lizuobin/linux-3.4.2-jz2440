@@ -90,7 +90,7 @@ static void dma_enqueue(struct snd_pcm_substream *substream)
 	dma_info.fp = audio_buffdone;
 	dma_info.fp_param = substream;
 	dma_info.period = prtd->dma_period;
-	dma_info.len = prtd->dma_period*limit;
+	dma_info.len = prtd->dma_period;
 
 	while (prtd->dma_loaded < limit) {
 		pr_debug("dma_loaded: %d\n", prtd->dma_loaded);
@@ -121,12 +121,6 @@ static void audio_buffdone(void *data)
 	pr_debug("Entered %s\n", __func__);
 
 	if (prtd->state & ST_RUNNING) {
-		prtd->dma_pos += prtd->dma_period;
-		if (prtd->dma_pos >= prtd->dma_end)
-			prtd->dma_pos = prtd->dma_start;
-
-		if (substream)
-			snd_pcm_period_elapsed(substream);
 
 		spin_lock(&prtd->lock);
 		if (!samsung_dma_has_circular()) {
@@ -134,6 +128,10 @@ static void audio_buffdone(void *data)
 			dma_enqueue(substream);
 		}
 		spin_unlock(&prtd->lock);
+
+		if (substream)
+			snd_pcm_period_elapsed(substream);
+
 	}
 }
 
@@ -174,6 +172,8 @@ static int dma_hw_params(struct snd_pcm_substream *substream,
 			? DMA_MEM_TO_DEV : DMA_DEV_TO_MEM);
 		dma_info.width = prtd->params->dma_size;
 		dma_info.fifo = prtd->params->dma_addr;
+
+        /* s3c_dma_request */
 		prtd->params->ch = prtd->params->ops->request(
 				prtd->params->channel, &dma_info);
 	}
