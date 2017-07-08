@@ -253,10 +253,6 @@ static struct platform_device smdk2440_audio = {
 };
 
 
-static struct platform_device wm8976_codec = {
-		.name = "wm8976-codec",
-		.id = -1,
-};
 
 static struct platform_device *smdk2440_devices[] __initdata = {
 	&s3c_device_ohci,
@@ -264,8 +260,8 @@ static struct platform_device *smdk2440_devices[] __initdata = {
 	&s3c_device_wdt,
 	&s3c_device_i2c0,
 	&s3c_device_iis,
-    &smdk2440_audio,
-    &wm8976_codec,
+	&smdk2440_audio,
+	&samsung_asoc_dma,
 };
 
 static void __init smdk2440_map_io(void)

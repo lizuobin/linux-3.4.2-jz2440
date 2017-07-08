@@ -583,7 +583,6 @@ static int wm8976_set_dai_clkdiv(struct snd_soc_dai *codec_dai,
 {
 	struct snd_soc_codec *codec = codec_dai->codec;
 	u16 reg;
-
 	switch (div_id) {
 	case WM8976_MCLKDIV:
 		reg = wm8976_read_reg_cache(codec, WM8976_CLOCK) & 0x11f;
@@ -663,11 +662,17 @@ static int wm8976_set_bias_level(struct snd_soc_codec *codec,
 	(SNDRV_PCM_FORMAT_S16_LE | SNDRV_PCM_FORMAT_S20_3LE | \
 	SNDRV_PCM_FORMAT_S24_3LE | SNDRV_PCM_FORMAT_S24_LE)
 
+static int wm8976_set_sysclk(struct snd_soc_dai *dai, int clk_id, unsigned int freq, int dir)
+{
+	return 0;
+}
+
 static struct snd_soc_dai_ops wm8976_dai_ops = {
 	.hw_params = wm8976_hw_params,
 	.digital_mute = wm8976_mute,
 	.set_fmt = wm8976_set_dai_fmt,
 	.set_clkdiv = wm8976_set_dai_clkdiv,
+	.set_sysclk = wm8976_set_sysclk,
 	.set_pll = wm8976_set_dai_pll,
 };
 
@@ -682,7 +687,7 @@ struct snd_soc_dai_driver wm8976_dai = {
 	.capture = {
 		.stream_name = "Capture",
 		.channels_min = 1,
-		.channels_max = 1,
+		.channels_max = 2,
 		.rates = WM8976_RATES,
 		.formats = WM8976_FORMATS,},
 	.ops = &wm8976_dai_ops,

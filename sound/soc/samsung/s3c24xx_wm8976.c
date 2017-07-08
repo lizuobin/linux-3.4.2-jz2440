@@ -135,7 +135,6 @@ static int s3c24xx_wm8976_hw_params(struct snd_pcm_substream *substream,
 	long err, cerr;
 	unsigned int div;
 	int i, bi;
-
 	err = 999999;
 	bi = 0;
 	for (i = 0; i < 2*33; i++) {
